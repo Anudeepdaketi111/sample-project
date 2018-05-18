@@ -1,0 +1,76 @@
+<html>
+<head>
+	<title>Articles</title>
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/static/css/loading.css" rel="stylesheet">
+	<script src="/static/js/jquery-2.2.3.min.js"></script>
+</head>
+<body>
+	<div class="" id="show_loading"></div>
+	<a href="/new_article/" class="btn btn-primary pull-right">Add Article</a>
+	<table id="articles" class="table table-bordered">
+
+	</table>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script>
+		 $(document).ready(function(){
+		    $('#show_loading').addClass('loading');
+		 		$.ajax({
+			          url : "/view_articles/",
+			          type : "GET",
+			          success : function(data) {
+			            $('#show_loading').removeClass('loading');
+			            var obj = data;
+						$.each(obj, function(key,value) {
+							var row="<tr>";
+							row=row+"<th>Title</th>";
+							row=row+"<td>"+value.title+"</td>";
+							
+							row=row+"<th>Author</th>";
+							row=row+"<td>"+value.author+"</td>";
+							row=row+"</tr>";
+							row=row+"<tr><th>Content</th>";
+							row=row+"<td colspan='2'>"+value.content+"</td><td><button class='btn btn-primary' onclick='likepost("+value.id+")'>Like  <span class='badge' id='badge"+value.id+"'>"+value.likes+"</span></button></td></tr>";
+						  
+						  $('#articles').append(row);
+						}); 
+			                     
+			          },
+			          error : function(xhr,errmsg,err) {
+			            $('#show_loading').removeClass('loading');
+			              alert(xhr.status + ": " + xhr.responseText);
+			              alert(errmsg);
+			          }
+			      });
+
+
+
+			});
+		 function likepost(id){
+		 	$('#show_loading').addClass('loading');
+		 	$.ajax({
+			          url : "/like_article/"+id+"/",
+			          type : "GET",
+			          success : function(data) {
+			            $('#show_loading').removeClass('loading');
+			            var obj = data;
+
+						alert(data.message);
+						if(data.message=="success"){
+							$('#badge'+id).html(data.likes);
+						}
+						else{
+							alert(data.message);
+						}
+			                     
+			          },
+			          error : function(xhr,errmsg,err) {
+			            $('#show_loading').removeClass('loading');
+			              alert(xhr.status + ": " + xhr.responseText);
+			              alert(errmsg);
+			          }
+			      });
+		 }
+	</script>
+</body>
+</html>
