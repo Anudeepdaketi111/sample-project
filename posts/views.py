@@ -42,9 +42,9 @@ def like_article(request,id):
         }
 	    return Response(data)
 	except:
-		data = {
-          "error": True,
-          "message": "Article not found",          
-        }
-        return Response(data) 
+      	data = {
+              "error": True,
+              "message": "Article not found",          
+            }
+            return Response(data) 
     
